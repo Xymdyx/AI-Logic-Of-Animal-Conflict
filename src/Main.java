@@ -7,7 +7,7 @@
 public class Main{
     public static int main(String[] args)
     {
-        // do the thing
+        // do the thing, man
         return 0;
     }
 }
