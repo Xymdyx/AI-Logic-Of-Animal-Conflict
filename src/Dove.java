@@ -8,7 +8,13 @@ public class Dove implements Individual{
     public int status;
     public int resources;
 
-    public void interact(){
+    public Dove()
+    {
+        this.status = 0;
+        this.resources = 0;
+    }
+
+    public void interact( Individual indv ){
         ;
     }
 
