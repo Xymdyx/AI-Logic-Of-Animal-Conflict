@@ -5,6 +5,10 @@
 * */
 
 public class Main{
+    public static final int HAWKPERCENT_DEF = 20;
+    public static final int RSCSIZE_DEF = 50;
+    public static final int HHCOST_DEF = 100;
+
     public static void main(String[] args)
     {
         if ( args.length == 0 || args.length > 4 )
@@ -14,9 +18,9 @@ public class Main{
         }
         // do the thing, man
         int popSize = Integer.parseInt( args[0] );
-        int hawkPercent = 20;
-        int rscSize = 50;
-        int hhCost = 100;
+        int hawkPercent = HAWKPERCENT_DEF;
+        int rscSize = RSCSIZE_DEF;
+        int hhCost = HHCOST_DEF;
 
         //check for optional params
         if (args.length >= 2)

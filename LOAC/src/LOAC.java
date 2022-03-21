@@ -19,7 +19,7 @@ public class LOAC{
 
     private void initIndivs()
     {
-        int hawkNum = this.hawkPercent * this.popSize;
+        int hawkNum = ((this.hawkPercent * this.popSize / 100));
         this.indvs = new ArrayList<Individual>();
         this.aliveIndvs = new ArrayList<Individual>();
 
@@ -74,6 +74,17 @@ public class LOAC{
 
 //METHODS
 
+    public String getIndvStr(Individual indv)
+    {
+        String indvStr = "Dove";
+        if( indv instanceof Hawk)
+            indvStr = "Hawk";
+        if( indv.getStatus() == Individual.IndvStatus.DEAD)
+            indvStr = "DEAD";
+
+        return indvStr;
+    }
+
     //display stats
     public void displayStats()
     {
@@ -86,7 +97,14 @@ public class LOAC{
 
         Each resource is worth: 50
         Cost of Hawk-Hawk interaction: 100*/
-        System.out.println();
+        int hawkNum = ((this.hawkPercent * this.popSize / 100));
+        System.out.println("Population size: " + this.popSize);
+        System.out.println("Percentage of Hawks: " + this.hawkPercent
+        +"\n\tNumber of Hawks: " + hawkNum );
+        System.out.println("\nPercentage of Doves: " + ( 100 - this.hawkPercent)
+                +"\n\tNumber of Doves: " + (popSize - hawkNum));
+        System.out.println("\nEach resource is worth: " + this.rscSize);
+        System.out.println("Cost of Hawk-Hawk interaction: " + this.hhCost);
     }
 
     //display points
@@ -104,7 +122,14 @@ Individual[7]=Dove:75
 Individual[8]=Dove:150
 Individual[9]=Dove:150
 Living: 9*/
-        System.out.println();
+        Individual indv;
+        String indvStr;
+        for( int num = 0; num < indvs.size(); num++){
+            indv = indvs.get(num);
+            indvStr = getIndvStr(indv);
+            System.out.println("Individual[" + num + "]=" + indvStr +":" + indv.getResources());
+        }
+        System.out.println("Living:" + aliveIndvs.size());
     }
 
     //sorted display
@@ -120,6 +145,16 @@ Living: 9*/
         Dove:150
         Dove:75
         DEAD:-50*/
+        Comparator<Individual> pointsSort =
+                Comparator.comparing(Individual::getResources).reversed();
+
+        indvs.sort(pointsSort);
+        String indvStr = "Dove";
+        for( Individual indv : indvs)
+        {
+            indvStr = getIndvStr(indv);
+            System.out.println(indvStr + ":" + indv.resources);
+        }
         System.out.println();
     }
 
@@ -140,11 +175,11 @@ Living: 9*/
     //run an interaction
     public void interact()
     {
-        int ranIdx1 = -1;
-        int ranIdx2 = -1;
-        int[] indvGains = null;
-        Individual indv1 = null;
-        Individual indv2 = null;
+        int ranIdx1;
+        int ranIdx2;
+        int[] indvGains;
+        Individual indv1;
+        Individual indv2;
         String indvStr1 = "Dove";
         String indvStr2 = "Dove";
         String indvSign1 = "+";
@@ -182,11 +217,12 @@ Living: 9*/
         System.out.print(indvStr2 + ": " + indvSign2 + indvGains[1]);
 
         //hawk death messages if applicable
+        System.out.println();
         checkIfDead( indv1, "one" );
         checkIfDead( indv2, "two" );
 
         System.out.print("Individual " + ranIdx1 + "=" + indv1.resources + "\t");
-        System.out.print("individual " + ranIdx2 + "=" + indv2.resources + "\n");
+        System.out.print("individual " + ranIdx2 + "=" + indv2.resources + "\n\n");
     }
 
     //run the simulation
@@ -200,6 +236,7 @@ Living: 9*/
 
     public void runNtimes( Scanner inScan )
     {
+        System.out.println("Enter how many interactions to run:");
         int num = inScan.nextInt();
         runSetTimes( num );
     }
@@ -208,8 +245,9 @@ Living: 9*/
     public void runStepThru( Scanner inScan )
     {
         String decision = "";
+        System.out.println("Press stop to stop the simulation: ");
         decision = inScan.next();
-        while( !(decision.toLowerCase().equals("stop")) ){
+        while( !(decision.equalsIgnoreCase("stop")) ){
             interact();
             decision = inScan.next();
         }
@@ -267,8 +305,10 @@ Living: 9*/
                 default:
                     System.out.println("Dude, what are you going on about? Try again...\n");
             }
-        } while( input != 8 && (aliveIndvs.size()) > 1);
+        } while( input != 8 && aliveIndvs.size() > 1);
 
+        if( aliveIndvs.size() > 1)
+            System.out.println("Exiting early due to too few living individuals");
         inScan.close();
         return 0;
     }
