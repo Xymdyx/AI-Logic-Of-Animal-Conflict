@@ -13,7 +13,7 @@ public class Main{
     {
         if ( args.length == 0 || args.length > 4 )
         {
-            System.out.println("./project02 popSize [percentHawks] [resourceAmt] [costHawk-Hawk]");
+            System.err.println("./project02 popSize [percentHawks] [resourceAmt] [costHawk-Hawk]");
             System.exit(0);
         }
         // do the thing, man
@@ -32,5 +32,11 @@ public class Main{
         
         LOAC simulation = new LOAC( popSize, hawkPercent, rscSize, hhCost );
         simulation.loop();
+
+    /* default values w 100: a few hawks die before equilibrium is achieved... All Doves of course live...
+    * 100 pop, 50 hawk... more hawks die before equilibrium is achieved. Hawks still have mnost points by a slim margin (300 pts)
+    * 100 pop, 80 hawk... more hawks die ( 74) before equilibrium achieved. Hawks ahead by a significant margin (8k pts)
+    * 100 pop, all hawks
+    * */
     }
 }

@@ -1,5 +1,5 @@
 /* author: stf8464
-* desc: project 2 individual interface
+* desc: project 2 individual abstract class
 * instructor: TJ Borreli
 * Due date: 3/24/22
 * */
@@ -10,6 +10,7 @@ public abstract class Individual{
         DEAD,
         ALIVE
     }
+
     public IndvStatus status;
     public int resources;
 

@@ -1,5 +1,5 @@
 /* author: stf8464
-* desc: project 2 Dove
+* desc: project 2 Hawk
 * instructor: TJ Borreli
 * Due date: 3/24/22
 * */

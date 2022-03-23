@@ -4,7 +4,7 @@
 * Due date: 3/24/22
 * */
 import java.util.*;
-import java.lang.Math;
+
 
 public class LOAC{
 //fields
@@ -73,6 +73,13 @@ public class LOAC{
     public void hhCost( int hhCost ){ this.hhCost = hhCost; }
 
 //METHODS
+    public void checkPopCount()
+    {
+        if( aliveIndvs.size() <= 1) {
+            System.out.println("Exiting early due to too few living individuals");
+            System.exit(0);
+        }
+    }
 
     public String getIndvStr(Individual indv)
     {
@@ -85,7 +92,7 @@ public class LOAC{
         return indvStr;
     }
 
-    //display stats
+    //display program initial stats
     public void displayStats()
     {
        /*Population size: 10
@@ -107,7 +114,7 @@ public class LOAC{
         System.out.println("Cost of Hawk-Hawk interaction: " + this.hhCost);
     }
 
-    //display points
+    //display points in order of individuals
     public void displayPoints()
     {
         /*
@@ -132,7 +139,7 @@ Living: 9*/
         System.out.println("Living:" + aliveIndvs.size());
     }
 
-    //sorted display
+    //sorted display by points in descending order
     public void displaySorted()
     {
         /*Hawk:350
@@ -229,6 +236,7 @@ Living: 9*/
     public void runSetTimes( int num )
     {
         while( num != 0 ){
+            checkPopCount();
             interact();
             num--;
         }
@@ -245,7 +253,7 @@ Living: 9*/
     public void runStepThru( Scanner inScan )
     {
         String decision = "";
-        System.out.println("Press stop to stop the simulation: ");
+        System.out.println("Enter \"stop\" to return to the menu: ");
         decision = inScan.next();
         while( !(decision.equalsIgnoreCase("stop")) ){
             interact();
@@ -269,7 +277,7 @@ Living: 9*/
         );
     }
 
-    public int loop()
+    public void loop()
     {
         // do the thing, man
         Scanner inScan = new Scanner(System.in);
@@ -307,9 +315,8 @@ Living: 9*/
             }
         } while( input != 8 && aliveIndvs.size() > 1);
 
-        if( aliveIndvs.size() > 1)
-            System.out.println("Exiting early due to too few living individuals");
+        //cleanup
         inScan.close();
-        return 0;
+        checkPopCount();
     }
 }

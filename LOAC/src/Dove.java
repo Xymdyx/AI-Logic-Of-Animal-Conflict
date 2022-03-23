@@ -25,6 +25,7 @@ public class Dove extends Individual{
             gains[1] =  rsc/2;
         }
 
+        //update
         if( gains[0] != 0)
             this.addResources(gains[0]);
         indv.addResources(gains[1]);
