@@ -3,8 +3,7 @@
 * instructor: TJ Borreli
 * Due date: 3/24/22
 * */
-import java.util.*;
-
+import java.util.*; //for arraylist and scanner
 
 public class LOAC{
 //fields
@@ -17,6 +16,7 @@ public class LOAC{
     private int encounters;
     private Random rng;
 
+    //initialize the initial population correctly
     private void initIndivs()
     {
         int hawkNum = ((this.hawkPercent * this.popSize / 100));
@@ -24,6 +24,7 @@ public class LOAC{
         this.aliveIndvs = new ArrayList<Individual>();
 
         for( int num = 0; num < popSize; num++ ){
+            // make hawks first and then the rest is doves
             if( num < hawkNum ) {
                 Hawk h = new Hawk();
                 indvs.add(h);
@@ -35,7 +36,6 @@ public class LOAC{
                 aliveIndvs.add(d);
             }
         }
-
     }
 
 //CONSTRUCTOR
@@ -73,7 +73,9 @@ public class LOAC{
     public void hhCost( int hhCost ){ this.hhCost = hhCost; }
 
 //METHODS
-    public void checkPopCount()
+
+    // ensure there is more than one living individual alive
+    private void checkPopCount()
     {
         if( aliveIndvs.size() <= 1) {
             System.out.println("Exiting early due to too few living individuals");
@@ -81,7 +83,8 @@ public class LOAC{
         }
     }
 
-    public String getIndvStr(Individual indv)
+    // get individual type for printing
+    private String getIndvStr(Individual indv)
     {
         String indvStr = "Dove";
         if( indv instanceof Hawk)
@@ -95,42 +98,25 @@ public class LOAC{
     //display program initial stats
     public void displayStats()
     {
-       /*Population size: 10
-        Percentage of Hawks: 80%
-            Number of Hawks: 8
-
-        Percentage of Doves: 20%
-            Number of Doves: 2
-
-        Each resource is worth: 50
-        Cost of Hawk-Hawk interaction: 100*/
         int hawkNum = ((this.hawkPercent * this.popSize / 100));
+
         System.out.println("Population size: " + this.popSize);
         System.out.println("Percentage of Hawks: " + this.hawkPercent
         +"\n\tNumber of Hawks: " + hawkNum );
+
         System.out.println("\nPercentage of Doves: " + ( 100 - this.hawkPercent)
                 +"\n\tNumber of Doves: " + (popSize - hawkNum));
+
         System.out.println("\nEach resource is worth: " + this.rscSize);
         System.out.println("Cost of Hawk-Hawk interaction: " + this.hhCost);
     }
 
-    //display points in order of individuals
+    //display points in order of individuals and display how many alive total
     public void displayPoints()
     {
-        /*
-Individual[0]=Hawk:350
-Individual[1]=DEAD:-50
-Individual[2]=Dove:175
-Individual[3]=Dove:200
-Individual[4]=Dove:150
-Individual[5]=Dove:225
-Individual[6]=Dove:225
-Individual[7]=Dove:75
-Individual[8]=Dove:150
-Individual[9]=Dove:150
-Living: 9*/
         Individual indv;
         String indvStr;
+
         for( int num = 0; num < indvs.size(); num++){
             indv = indvs.get(num);
             indvStr = getIndvStr(indv);
@@ -142,21 +128,14 @@ Living: 9*/
     //sorted display by points in descending order
     public void displaySorted()
     {
-        /*Hawk:350
-        Dove:225
-        Dove:225
-        Dove:200
-        Dove:175
-        Dove:150
-        Dove:150
-        Dove:150
-        Dove:75
-        DEAD:-50*/
+        //sort in descending order
         Comparator<Individual> pointsSort =
                 Comparator.comparing(Individual::getResources).reversed();
 
         indvs.sort(pointsSort);
-        String indvStr = "Dove";
+        String indvStr;
+
+        //print in sorted order
         for( Individual indv : indvs)
         {
             indvStr = getIndvStr(indv);
@@ -167,7 +146,7 @@ Living: 9*/
 
 
     // display message if hawk has died
-    public void checkIfDead( Individual indv, String numStr )
+    private void checkIfDead( Individual indv, String numStr )
     {
         if (indv.getStatus() == Individual.IndvStatus.DEAD) {
             if( indv instanceof Dove){
@@ -192,6 +171,7 @@ Living: 9*/
         String indvSign1 = "+";
         String indvSign2 = "+";
 
+        //randomly choose
         ranIdx1 = rng.nextInt(aliveIndvs.size());
         ranIdx2 =  rng.nextInt(aliveIndvs.size());
 
@@ -206,11 +186,11 @@ Living: 9*/
         if( indv2 instanceof Hawk )
             indvStr2 = "Hawk";
 
-
+        //interaction
         indvGains = indv1.interact(indv2, this.rscSize, this.hhCost);
         this.encounters++;
 
-        //update print sign
+        //update print sign before printing
         if( indvGains[0] < 0 )
             indvSign1 = "";
         if( indvGains[1] < 0 )
@@ -242,25 +222,29 @@ Living: 9*/
         }
     }
 
+    // run simulation by an integer N the user enter
     public void runNtimes( Scanner inScan )
     {
-        System.out.println("Enter how many interactions to run:");
+        System.out.print("Enter how many interactions to run:");
         int num = inScan.nextInt();
         runSetTimes( num );
     }
 
-    //run the simulation
+    //run the simulation until the user enters "stop"
     public void runStepThru( Scanner inScan )
     {
+        inScan.nextLine(); //clear buffer
         String decision = "";
-        System.out.println("Enter \"stop\" to return to the menu: ");
-        decision = inScan.next();
+        System.out.print("Enter \"stop\" to return to the menu: ");
+        decision = inScan.nextLine();
         while( !(decision.equalsIgnoreCase("stop")) ){
             interact();
-            decision = inScan.next();
+            System.out.print("Enter \"stop\" to return to the menu: ");
+            decision = inScan.nextLine();
         }
     }
 
+    //main menu message
     public void menuMessage()
     {
         System.out.println(
@@ -277,11 +261,13 @@ Living: 9*/
         );
     }
 
+    //main input loop for the user
     public void loop()
     {
-        // do the thing, man
         Scanner inScan = new Scanner(System.in);
-        int input = 0;
+        int input;
+
+        //want them to see this at least once
         do{
             menuMessage();
             input = inScan.nextInt();

@@ -6,24 +6,29 @@
 
 public abstract class Individual{
 
+    //status enum
     public enum IndvStatus{
         DEAD,
         ALIVE
     }
 
+    //fields
     public IndvStatus status;
     public int resources;
 
+    // helper for updating status after interaction
     private void checkDead()
     {
         if( this.resources < 0 )
             this.status = IndvStatus.DEAD;
     }
 
+    //get
     public IndvStatus getStatus(){ return this.status; }
 
     public int getResources(){ return this.resources; }
 
+    //set
     public void setStatus( IndvStatus status ){ this.status = status; }
 
     public void setResource( int resources)
@@ -32,13 +37,14 @@ public abstract class Individual{
         checkDead();
     }
 
+    //modifying resource by an amount
     public void addResources( int add )
     {
         this.resources += add;
         checkDead();
     }
 
-    // we call this method if it's the first one chosen
+    // we call this method if this instance is the first one chosen
     public abstract int[] interact( Individual indv, int rsc, int hhCost );
 
 }

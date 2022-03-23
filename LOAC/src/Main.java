@@ -36,7 +36,7 @@ public class Main{
     /* default values w 100: a few hawks die before equilibrium is achieved... All Doves of course live...
     * 100 pop, 50 hawk... more hawks die before equilibrium is achieved. Hawks still have mnost points by a slim margin (300 pts)
     * 100 pop, 80 hawk... more hawks die ( 74) before equilibrium achieved. Hawks ahead by a significant margin (8k pts)
-    * 100 pop, all hawks
+    * 100 pop, all hawks / 99 hawks. most hawks die out. Exit early due to not enough living indvs
     * */
     }
 }
